@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.ecommerce.dto.LoginDTO;
 import uz.pdp.ecommerce.dto.RegisterDTO;
+import uz.pdp.ecommerce.dto.ResponseDTO;
+import uz.pdp.ecommerce.dto.VerifyDTO;
 import uz.pdp.ecommerce.service.impl.AuthUserServiceImpl;
 
 @RestController
@@ -18,6 +20,11 @@ public class AuthUserController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody @Valid RegisterDTO registerDTO) {
         return authUserService.register(registerDTO);
+    }
+
+    @PostMapping("/verify")
+    public ResponseDTO verify(@RequestBody VerifyDTO verifyDTO) {
+        return authUserService.verify(verifyDTO);
     }
 
     @PostMapping("/login")

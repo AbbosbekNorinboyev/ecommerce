@@ -17,4 +17,6 @@ public class RegisterDTO {
     private String fullName;
     @NotBlank(message = "phoneNumber can not be null and empty")
     private String phoneNumber;
+    @NotBlank(message = "email can not be null and empty")
+    private String email;
 }

@@ -6,7 +6,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import uz.pdp.ecommerce.enums.Roles;
+import uz.pdp.ecommerce.enums.UserStatus;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -27,6 +29,13 @@ public class AuthUser implements UserDetails {
     private String phoneNumber;
     @Enumerated(EnumType.STRING)
     private Roles role;
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
+    private Boolean isLogin;
+    private String code;
+    private String email;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
