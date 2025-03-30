@@ -31,4 +31,19 @@ public class AuthUserController {
     public ResponseEntity<String> login(@RequestBody @Valid LoginDTO loginDTO) {
         return authUserService.login(loginDTO);
     }
+
+    @PostMapping("/checkCodeByEmailInLogin")
+    public ResponseDTO checkCodeByEmailInLogin(@RequestParam String email, @RequestParam String code) {
+        return authUserService.checkCodeByEmail(email, code);
+    }
+
+    @PostMapping("/checkCode")
+    public ResponseDTO checkCode(@RequestParam String email, @RequestParam String code) {
+        return authUserService.checkCode(email, code);
+    }
+
+    @PostMapping("/updatePassword")
+    public ResponseDTO updatePassword(@RequestParam String email, @RequestParam String newPassword) {
+        return authUserService.updatePassword(email, newPassword);
+    }
 }

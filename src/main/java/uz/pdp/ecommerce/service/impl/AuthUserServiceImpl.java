@@ -90,7 +90,7 @@ public class AuthUserServiceImpl implements AuthUserService {
             }
             AuthUser authUserVerify = authUserMapper.toVerify(authUser, verifyDTO);
             authUserVerify.setCreatedAt(LocalDateTime.now());
-            authUserVerify.setIsLogin(true);
+            authUserVerify.setIsLogin(false);
             AuthUser savedAuthUser = authUserRepository.save(authUserVerify);
             return ResponseDTO.builder()
                     .code(HttpStatus.OK.value())
@@ -111,7 +111,7 @@ public class AuthUserServiceImpl implements AuthUserService {
         AuthUser authUser = authUserRepository.findByUsername(loginDTO.getUsername())
                 .orElseThrow(() -> new CustomUserNotFoundException("AuthUser not found by username: " + loginDTO.getUsername()));
         if (authUser.getUsername() == null) {
-            return ResponseEntity.ok().body("Username not found");
+            return ResponseEntity.badRequest().body("Username not found");
         }
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword())
@@ -119,5 +119,62 @@ public class AuthUserServiceImpl implements AuthUserService {
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(loginDTO.getUsername());
         String jwtGenerateToken = jwtUtil.generateToken(userDetails.getUsername());
         return ResponseEntity.ok(jwtGenerateToken);
+    }
+
+    @Override
+    public ResponseDTO checkCodeByEmail(String email, String code) {
+        AuthUser authUser = authUserRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomUserNotFoundException("AuthUser not found bu email: " + email));
+        if (authUser.getCode() != null && authUser.getCode().equals(code)) {
+            authUser.setIsLogin(true);
+            authUser.setLoginAt(LocalDateTime.now());
+            authUserRepository.save(authUser);
+            return ResponseDTO.builder()
+                    .code(HttpStatus.OK.value())
+                    .message("Successfully checked")
+                    .success(true)
+                    .data(authUser)
+                    .build();
+        }
+        return ResponseDTO.builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .message("Code is invalid")
+                .success(false)
+                .build();
+    }
+
+    @Override
+    public ResponseDTO checkCode(String email, String code) {
+        AuthUser authUser = authUserRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomUserNotFoundException("AuthUser not found by email: " + email));
+        if (authUser.getCode() != null && authUser.getCode().equals(code)) {
+            return ResponseDTO.builder()
+                    .code(HttpStatus.OK.value())
+                    .message("Code is successfully checked")
+                    .success(true)
+                    .data(authUser)
+                    .build();
+        }
+        return ResponseDTO.builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .message("Code is invalid")
+                .success(false)
+                .build();
+    }
+
+    @Override
+    public ResponseDTO updatePassword(String email, String newPassword) {
+        AuthUser authUser = authUserRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomUserNotFoundException("AuthUser not found by email: " + email));
+        String encodePassword = passwordEncoder.encode(newPassword);
+        authUser.setPassword(encodePassword);
+        authUserRepository.save(authUser);
+        System.out.println("authUser = " + authUser);
+        return ResponseDTO.builder()
+                .code(HttpStatus.OK.value())
+                .message("Password is successfully updated")
+                .success(true)
+                .data(authUser)
+                .build();
     }
 }

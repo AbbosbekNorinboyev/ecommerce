@@ -13,4 +13,10 @@ public interface AuthUserService {
 
     ResponseEntity<String> login(LoginDTO loginDTO);
 
+    ResponseDTO checkCodeByEmail(String email, String code);
+
+    ResponseDTO checkCode(String email, String code);
+
+    ResponseDTO updatePassword(String email, String newPassword);
+
 }

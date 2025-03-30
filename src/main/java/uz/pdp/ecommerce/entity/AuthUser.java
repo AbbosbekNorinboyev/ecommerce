@@ -34,6 +34,7 @@ public class AuthUser implements UserDetails {
     private Boolean isLogin;
     private String code;
     private String email;
+    private LocalDateTime loginAt;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
