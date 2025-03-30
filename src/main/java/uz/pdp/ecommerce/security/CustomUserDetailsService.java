@@ -16,7 +16,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerUserDetailsService implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService {
 
     private final AuthUserRepository authUserRepository;
 
@@ -26,6 +26,6 @@ public class CustomerUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found by username: " + username));
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + authUser.getRole().name()));
-        return new User(authUser.getUsername(), authUser.getUsername(), authorities);
+        return new User(authUser.getUsername(), authUser.getPassword(), authorities);
     }
 }

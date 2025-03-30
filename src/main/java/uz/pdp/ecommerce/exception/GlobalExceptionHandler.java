@@ -52,12 +52,12 @@ public class GlobalExceptionHandler {
                 .build();
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseDTO<Exception> handleException(Exception exception) {
-        return ResponseDTO.<Exception>builder()
-                .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .message("Something wrong -> " + exception.getMessage())
-                .success(false)
-                .build();
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseDTO<Exception> handleException(Exception exception) {
+//        return ResponseDTO.<Exception>builder()
+//                .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+//                .message("Something wrong -> " + exception.getMessage())
+//                .success(false)
+//                .build();
+//    }
 }

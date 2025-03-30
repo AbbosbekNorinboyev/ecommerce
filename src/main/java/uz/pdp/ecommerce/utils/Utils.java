@@ -1,19 +1,14 @@
-package uz.pdp.ecommerce.Utils;
+package uz.pdp.ecommerce.utils;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
-import uz.pdp.ecommerce.entity.AuthUser;
 import uz.pdp.ecommerce.repository.AuthUserRepository;
 
-import java.util.Optional;
 import java.util.Random;
 
 @Component
 @RequiredArgsConstructor
 public class Utils {
-//    private final JavaMailSender javaMailSender;
     private final AuthUserRepository authUserRepository;
 
     public boolean checkEmail(String email) {
@@ -38,16 +33,6 @@ public class Utils {
 //            return code != null && code.trim().isEmpty() && authUser.getCode().equals(code);
 //        }
 //        return false;
-//    }
-
-//    public boolean sendCodeToMail(String code, String mail) {
-//        SimpleMailMessage message = new SimpleMailMessage();
-//        message.setFrom("xalqaroshartnomalaruz@gmail.com");
-//        message.setText(mail);
-//        message.setSubject("Restaurant - APP");
-//        message.setText(code);
-//        javaMailSender.send(message);
-//        return true;
 //    }
 
     public boolean checkPhoneNumber(String phoneNumber) {

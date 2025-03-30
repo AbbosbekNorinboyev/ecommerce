@@ -5,9 +5,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
+@Data
 public class ErrorDTO {
     private String field;
     private String message;

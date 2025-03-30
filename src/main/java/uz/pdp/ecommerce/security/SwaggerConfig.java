@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
                 version = "2.6.0",
                 description = "API Documentation"),
         servers = {
-                @Server(url = "http://localhost:2216", description = "Local Server"),
+                @Server(url = "http://localhost:2218", description = "Local Server"),
         },
         security = @SecurityRequirement(name = "bearerAuth") // Apply globally
 )
