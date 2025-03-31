@@ -48,6 +48,10 @@ public class SecurityConfig {
                                     "/v3/api-docs/**",
                                     "/api/auths/**",
                                     "/webjars/**").permitAll()
+                            .requestMatchers(
+                                    "/api/categories/create",
+                                    "/api/categories/update",
+                                    "/api/categories/delete").hasRole("ADMIN")
                             .anyRequest().authenticated();
                 })
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
