@@ -65,7 +65,7 @@ public class AuthUserServiceImpl implements AuthUserService {
     @Override
     public ResponseDTO verify(VerifyDTO verifyDTO) {
         AuthUser authUser = authUserRepository.findById(verifyDTO.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("AuthUser not found: " + verifyDTO.getId()));
+                .orElseThrow(() -> new CustomUserNotFoundException("AuthUser not found: " + verifyDTO.getId()));
         if (authUser.getCode() != null && verifyDTO.getCode() != null && authUser.getCode().equals(verifyDTO.getCode())) {
             if (!utils.checkEmail(verifyDTO.getEmail())) {
                 return ResponseDTO.builder()
@@ -175,6 +175,64 @@ public class AuthUserServiceImpl implements AuthUserService {
                 .message("Password is successfully updated")
                 .success(true)
                 .data(authUser)
+                .build();
+    }
+
+    @Override
+    public ResponseDTO checkUpdatePassword(String email, String newPassword, String code) {
+        AuthUser authUser = authUserRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomUserNotFoundException("AuthUser not found by email: " + email));
+        if (authUser.getCode() != null && authUser.getCode().equals(code)) {
+            authUser.setCode(code);
+            authUser.setPassword(passwordEncoder.encode(newPassword));
+            authUserRepository.save(authUser);
+            return ResponseDTO.builder()
+                    .code(HttpStatus.OK.value())
+                    .message("New Password is successfully checked")
+                    .success(true)
+                    .data(authUser)
+                    .build();
+        }
+        return ResponseDTO.builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .message("Code is invalid")
+                .success(false)
+                .build();
+    }
+
+    @Override
+    public ResponseDTO updateEmail(String email, String newEmail) {
+        AuthUser authUser = authUserRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomUserNotFoundException("AuthUser not found by email: " + email));
+        authUser.setEmail(newEmail);
+        authUserRepository.save(authUser);
+        return ResponseDTO.builder()
+                .code(HttpStatus.OK.value())
+                .message("Email is successfully updated")
+                .success(true)
+                .data(authUser)
+                .build();
+    }
+
+    @Override
+    public ResponseDTO checkUpdateEmail(String email, String newEmail, String code) {
+        AuthUser authUser = authUserRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomUserNotFoundException("AuthUser not found by email: " + email));
+        if (authUser.getCode() != null && authUser.getCode().equals(code)) {
+            authUser.setCode(code);
+            authUser.setEmail(newEmail);
+            authUserRepository.save(authUser);
+            return ResponseDTO.builder()
+                    .code(HttpStatus.OK.value())
+                    .message("New Email is successfully checked")
+                    .success(true)
+                    .data(authUser)
+                    .build();
+        }
+        return ResponseDTO.builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .message("Code is invalid")
+                .success(false)
                 .build();
     }
 }
