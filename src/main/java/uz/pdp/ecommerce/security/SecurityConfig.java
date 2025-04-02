@@ -51,10 +51,11 @@ public class SecurityConfig {
                             .requestMatchers(
                                     "/api/categories/create",
                                     "/api/categories/update",
-                                    "/api/categories/delete",
                                     "/api/products/create",
                                     "/api/products/update",
-                                    "/api/products/delete").hasRole("ADMIN")
+                                    "/api/productOrders/create",
+                                    "/api/productOrders/update"
+                                    ).hasRole("ADMIN")
                             .anyRequest().authenticated();
                 })
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)

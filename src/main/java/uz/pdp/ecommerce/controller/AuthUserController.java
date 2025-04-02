@@ -8,14 +8,14 @@ import uz.pdp.ecommerce.dto.LoginDTO;
 import uz.pdp.ecommerce.dto.RegisterDTO;
 import uz.pdp.ecommerce.dto.ResponseDTO;
 import uz.pdp.ecommerce.dto.VerifyDTO;
-import uz.pdp.ecommerce.service.impl.AuthUserServiceImpl;
+import uz.pdp.ecommerce.service.AuthUserService;
 
 @RestController
 @RequestMapping("/api/auths")
 @RequiredArgsConstructor
 @CrossOrigin("http://localhost:2218")
 public class AuthUserController {
-    private final AuthUserServiceImpl authUserService;
+    private final AuthUserService authUserService;
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody @Valid RegisterDTO registerDTO) {

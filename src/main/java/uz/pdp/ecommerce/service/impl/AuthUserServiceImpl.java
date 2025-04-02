@@ -12,7 +12,6 @@ import uz.pdp.ecommerce.dto.*;
 import uz.pdp.ecommerce.entity.AuthUser;
 import uz.pdp.ecommerce.enums.Roles;
 import uz.pdp.ecommerce.exception.CustomUserNotFoundException;
-import uz.pdp.ecommerce.exception.ResourceNotFoundException;
 import uz.pdp.ecommerce.mapper.AuthUserMapper;
 import uz.pdp.ecommerce.repository.AuthUserRepository;
 import uz.pdp.ecommerce.security.CustomUserDetailsService;

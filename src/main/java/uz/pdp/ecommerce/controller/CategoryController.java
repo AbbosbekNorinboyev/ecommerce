@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import uz.pdp.ecommerce.dto.ResponseDTO;
 import uz.pdp.ecommerce.request.CategoryRequest;
 import uz.pdp.ecommerce.response.CategoryResponse;
-import uz.pdp.ecommerce.service.impl.CategoryServiceImpl;
+import uz.pdp.ecommerce.service.CategoryService;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
 public class CategoryController {
-    private final CategoryServiceImpl categoryService;
+    private final CategoryService categoryService;
 
     @PostMapping("/create")
     public ResponseDTO<CategoryResponse> createCategory(@RequestBody @Valid CategoryRequest categoryRequest) {

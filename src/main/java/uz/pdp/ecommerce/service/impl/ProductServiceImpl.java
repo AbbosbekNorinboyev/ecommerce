@@ -3,10 +3,10 @@ package uz.pdp.ecommerce.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import uz.pdp.ecommerce.dto.ErrorDTO;
 import uz.pdp.ecommerce.dto.ResponseDTO;
 import uz.pdp.ecommerce.entity.Category;
 import uz.pdp.ecommerce.entity.Product;
-import uz.pdp.ecommerce.exception.CustomUserNotFoundException;
 import uz.pdp.ecommerce.exception.ResourceNotFoundException;
 import uz.pdp.ecommerce.mapper.ProductMapper;
 import uz.pdp.ecommerce.repository.AuthUserRepository;
@@ -16,6 +16,7 @@ import uz.pdp.ecommerce.request.ProductRequest;
 import uz.pdp.ecommerce.response.ProductResponse;
 import uz.pdp.ecommerce.security.SessionId;
 import uz.pdp.ecommerce.service.ProductService;
+import uz.pdp.ecommerce.validation.ProductValidation;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,17 +24,34 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
+    private final SessionId sessionId;
     private final ProductMapper productMapper;
     private final ProductRepository productRepository;
+    private final ProductValidation productValidation;
     private final AuthUserRepository authUserRepository;
     private final CategoryRepository categoryRepository;
-    private final SessionId sessionId;
 
     @Override
     public ResponseDTO<ProductResponse> createProduct(ProductRequest productRequest) {
         return authUserRepository.findById(sessionId.getSessionId())
                 .flatMap(authUser -> categoryRepository.findById(productRequest.getCategoryId())
                         .map(category -> {
+                            List<ErrorDTO> errors = productValidation.validate(productRequest);
+                            if (!errors.isEmpty()) {
+                                ResponseDTO.<ProductResponse>builder()
+                                        .code(HttpStatus.BAD_REQUEST.value())
+                                        .message("Product validation error")
+                                        .success(false)
+                                        .build();
+                            }
+                            Long authUserId = sessionId.getSessionId();
+                            if (!authUserId.equals(productRequest.getAuthUserId())) {
+                                ResponseDTO.<ProductResponse>builder()
+                                        .code(HttpStatus.NOT_FOUND.value())
+                                        .message("AuthUser not found")
+                                        .success(false)
+                                        .build();
+                            }
                             Product product = productMapper.toEntity(productRequest);
                             product.setAuthUser(authUser);
                             product.setCategory(category);

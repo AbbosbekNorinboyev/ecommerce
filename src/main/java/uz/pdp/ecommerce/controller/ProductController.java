@@ -1,11 +1,12 @@
 package uz.pdp.ecommerce.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.ecommerce.dto.ResponseDTO;
 import uz.pdp.ecommerce.request.ProductRequest;
 import uz.pdp.ecommerce.response.ProductResponse;
-import uz.pdp.ecommerce.service.impl.ProductServiceImpl;
+import uz.pdp.ecommerce.service.ProductService;
 
 import java.util.List;
 
@@ -13,10 +14,10 @@ import java.util.List;
 @RequestMapping("/api/products")
 @RequiredArgsConstructor
 public class ProductController {
-    private final ProductServiceImpl productService;
+    private final ProductService productService;
 
     @PostMapping("/create")
-    public ResponseDTO<ProductResponse> createProduct(@RequestBody ProductRequest productRequest) {
+    public ResponseDTO<ProductResponse> createProduct(@RequestBody @Valid ProductRequest productRequest) {
         return productService.createProduct(productRequest);
     }
 
@@ -31,7 +32,7 @@ public class ProductController {
     }
 
     @PutMapping("/update/{productId}")
-    public ResponseDTO<Void> updateProduct(@RequestBody ProductRequest productRequest,
+    public ResponseDTO<Void> updateProduct(@RequestBody @Valid ProductRequest productRequest,
                                            @PathVariable Long productId) {
         return productService.updateProduct(productRequest, productId);
     }
