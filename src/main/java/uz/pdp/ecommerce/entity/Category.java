@@ -1,9 +1,6 @@
 package uz.pdp.ecommerce.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -21,7 +18,9 @@ public class Category {
     private Long id;
     private String name;
     private String description;
-    private Long authUserId;
+    @ManyToOne
+    @JoinColumn(name = "auth_user_id")
+    private AuthUser authUser;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

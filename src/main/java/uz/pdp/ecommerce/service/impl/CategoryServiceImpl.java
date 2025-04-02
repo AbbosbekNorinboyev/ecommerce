@@ -11,6 +11,7 @@ import uz.pdp.ecommerce.repository.AuthUserRepository;
 import uz.pdp.ecommerce.repository.CategoryRepository;
 import uz.pdp.ecommerce.request.CategoryRequest;
 import uz.pdp.ecommerce.response.CategoryResponse;
+import uz.pdp.ecommerce.security.SessionId;
 import uz.pdp.ecommerce.service.CategoryService;
 
 import java.time.LocalDateTime;
@@ -22,14 +23,14 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
     private final CategoryRepository categoryRepository;
     private final AuthUserRepository authUserRepository;
+    private final SessionId sessionId;
 
     @Override
     public ResponseDTO<CategoryResponse> createCategory(CategoryRequest categoryRequest) {
-        return authUserRepository.findById(categoryRequest.getAuthUserId())
+        return authUserRepository.findById(sessionId.getSessionId())
                 .map(authUser -> {
                     Category category = categoryMapper.toEntity(categoryRequest);
-                    category.setAuthUserId(authUser.getId());
-                    System.out.println("category = " + category);
+                    category.setAuthUser(authUser);
                     categoryRepository.save(category);
                     return ResponseDTO.<CategoryResponse>builder()
                             .code(HttpStatus.OK.value())
@@ -80,18 +81,6 @@ public class CategoryServiceImpl implements CategoryService {
         return ResponseDTO.<Void>builder()
                 .code(HttpStatus.OK.value())
                 .message("Category successfully updated")
-                .success(true)
-                .build();
-    }
-
-    @Override
-    public ResponseDTO<Void> deleteCategory(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found: " + categoryId));
-        categoryRepository.delete(category);
-        return ResponseDTO.<Void>builder()
-                .code(HttpStatus.OK.value())
-                .message("Category successfully deleted")
                 .success(true)
                 .build();
     }

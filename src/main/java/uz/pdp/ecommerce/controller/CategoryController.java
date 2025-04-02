@@ -36,9 +36,4 @@ public class CategoryController {
                                             @PathVariable Long categoryId) {
         return categoryService.updateCategory(categoryRequest, categoryId);
     }
-
-    @DeleteMapping("/delete/{categoryId}")
-    public ResponseDTO<Void> deleteCategory(@PathVariable Long categoryId) {
-        return categoryService.deleteCategory(categoryId);
-    }
 }
