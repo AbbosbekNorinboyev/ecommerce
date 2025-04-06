@@ -42,6 +42,7 @@ public class ProductServiceImpl implements ProductService {
                                         .code(HttpStatus.BAD_REQUEST.value())
                                         .message("Product validation error")
                                         .success(false)
+                                        .errors(errors)
                                         .build();
                             }
                             Long authUserId = sessionId.getSessionId();

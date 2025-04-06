@@ -38,6 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
                                 .code(HttpStatus.NOT_FOUND.value())
                                 .message("Category validation error")
                                 .success(false)
+                                .errors(errors)
                                 .build();
                     }
                     Long authUserId = sessionId.getSessionId();

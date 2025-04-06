@@ -42,6 +42,7 @@ public class ProductOrderServiceImpl implements ProductOrderService {
                                         .code(HttpStatus.NOT_FOUND.value())
                                         .message("ProductOrder validation error")
                                         .success(false)
+                                        .errors(errors)
                                         .build();
                             }
                             Long authUserId = sessionId.getSessionId();

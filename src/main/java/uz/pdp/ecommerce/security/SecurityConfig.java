@@ -54,7 +54,9 @@ public class SecurityConfig {
                                     "/api/products/create",
                                     "/api/products/update",
                                     "/api/productOrders/create",
-                                    "/api/productOrders/update"
+                                    "/api/productOrders/update",
+                                    "/api/comments/create",
+                                    "/api/comments/update"
                                     ).hasRole("ADMIN")
                             .anyRequest().authenticated();
                 })

@@ -1,6 +1,7 @@
 package uz.pdp.ecommerce.exception;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -48,6 +49,15 @@ public class GlobalExceptionHandler {
         return ResponseDTO.<CustomUserNotFoundException>builder()
                 .code(HttpStatus.NOT_FOUND.value())
                 .message(customUserNotFoundException.getMessage())
+                .success(false)
+                .build();
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseDTO<Void> handleBadRequestException(BadRequestException badRequestException) {
+        return ResponseDTO.<Void>builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .message(badRequestException.getMessage())
                 .success(false)
                 .build();
     }
