@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  spring-boot-ecommerce:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spring-boot-ecommerce
+    restart: always
+    ports:
+      - "2218:2218"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ecommerce
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 2210
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 2210
+      POSTGRES_DB: ecommerce
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+volumes:
+  postgres_data:
+    driver: local

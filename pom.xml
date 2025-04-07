@@ -123,6 +123,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>ecommerce</finalName>
 	</build>
 
 </project>
