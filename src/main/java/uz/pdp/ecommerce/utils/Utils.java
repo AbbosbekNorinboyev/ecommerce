@@ -19,7 +19,6 @@ public class Utils {
         return email.matches(emailRegex);
     }
 
-
     public String getCode() {
         Random random = new Random();
         int randomCode = 100000 + random.nextInt(90000);

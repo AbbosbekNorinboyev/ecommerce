@@ -18,11 +18,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import uz.pdp.ecommerce.filter.JWTFilter;
-import uz.pdp.ecommerce.utils.JWTUtil;
 
 import java.util.Arrays;
 import java.util.List;
-
 
 @Configuration
 @EnableWebSecurity
@@ -57,7 +55,7 @@ public class SecurityConfig {
                                     "/api/productOrders/update",
                                     "/api/comments/create",
                                     "/api/comments/update"
-                                    ).hasRole("ADMIN")
+                            ).hasRole("ADMIN")
                             .anyRequest().authenticated();
                 })
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)

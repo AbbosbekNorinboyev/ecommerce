@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @OpenAPIDefinition(
         info = @Info(
                 version = "2.6.0",
-                description = "API Documentation"),
+                description = "Ecommerce Application API Documentation"),
         servers = {
                 @Server(url = "http://localhost:2218", description = "Local Server"),
         },

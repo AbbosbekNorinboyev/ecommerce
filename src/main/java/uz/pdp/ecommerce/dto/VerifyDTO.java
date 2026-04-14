@@ -1,7 +1,11 @@
 package uz.pdp.ecommerce.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import uz.pdp.ecommerce.enums.Roles;
+
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor

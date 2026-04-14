@@ -1,8 +1,10 @@
 package uz.pdp.ecommerce.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
-import uz.pdp.ecommerce.enums.Roles;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Builder

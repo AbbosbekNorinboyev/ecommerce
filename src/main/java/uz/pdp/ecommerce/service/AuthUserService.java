@@ -22,6 +22,6 @@ public interface AuthUserService {
     ResponseDTO checkUpdatePassword(String email, String newPassword, String code);
 
     ResponseDTO updateEmail(String email, String newEmail);
-    ResponseDTO checkUpdateEmail(String email, String newEmail, String code);
 
+    ResponseDTO checkUpdateEmail(String email, String newEmail, String code);
 }

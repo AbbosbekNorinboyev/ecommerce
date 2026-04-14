@@ -24,5 +24,4 @@ public class ProductRequest {
     private Long categoryId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
 }

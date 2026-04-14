@@ -46,11 +46,14 @@ public class AuthUserController {
     public ResponseDTO updatePassword(@RequestParam String email, @RequestParam String newPassword) {
         return authUserService.updatePassword(email, newPassword);
     }
+
     @PostMapping("/checkUpdatePassword")
-    public ResponseDTO checkUpdatePassword(@RequestParam String email, @RequestParam String newPassword,
-                                        @RequestParam String code) {
+    public ResponseDTO checkUpdatePassword(@RequestParam String email,
+                                           @RequestParam String newPassword,
+                                           @RequestParam String code) {
         return authUserService.checkUpdatePassword(email, newPassword, code);
     }
+
     @PostMapping("/updateEmail")
     public ResponseDTO updateEmail(@RequestParam String email, @RequestParam String newEmail) {
         return authUserService.updateEmail(email, newEmail);

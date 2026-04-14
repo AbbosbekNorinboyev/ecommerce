@@ -20,6 +20,7 @@ public class AuthUserMapper {
                 .updatedAt(user.getUpdatedAt())
                 .build();
     }
+
     public AuthUser toVerify(AuthUser authUser, VerifyDTO verifyDTO) {
         authUser.setCode(verifyDTO.getCode());
         authUser.setStatus(UserStatus.ACTIVE);
