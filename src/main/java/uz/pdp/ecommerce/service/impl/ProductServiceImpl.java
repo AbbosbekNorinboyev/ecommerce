@@ -3,8 +3,8 @@ package uz.pdp.ecommerce.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import uz.pdp.ecommerce.dto.ErrorDTO;
-import uz.pdp.ecommerce.dto.ResponseDTO;
+import uz.pdp.ecommerce.dto.ErrorDto;
+import uz.pdp.ecommerce.dto.ResponseDto;
 import uz.pdp.ecommerce.entity.Category;
 import uz.pdp.ecommerce.entity.Product;
 import uz.pdp.ecommerce.exception.ResourceNotFoundException;
@@ -14,7 +14,7 @@ import uz.pdp.ecommerce.repository.CategoryRepository;
 import uz.pdp.ecommerce.repository.ProductRepository;
 import uz.pdp.ecommerce.request.ProductRequest;
 import uz.pdp.ecommerce.response.ProductResponse;
-import uz.pdp.ecommerce.security.SessionId;
+import uz.pdp.ecommerce.config.SessionId;
 import uz.pdp.ecommerce.service.ProductService;
 import uz.pdp.ecommerce.validation.ProductValidation;
 
@@ -32,13 +32,13 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public ResponseDTO<ProductResponse> createProduct(ProductRequest productRequest) {
+    public ResponseDto<ProductResponse> createProduct(ProductRequest productRequest) {
         return authUserRepository.findById(sessionId.getSessionId())
                 .flatMap(authUser -> categoryRepository.findById(productRequest.getCategoryId())
                         .map(category -> {
-                            List<ErrorDTO> errors = productValidation.validate(productRequest);
+                            List<ErrorDto> errors = productValidation.validate(productRequest);
                             if (!errors.isEmpty()) {
-                                ResponseDTO.<ProductResponse>builder()
+                                ResponseDto.<ProductResponse>builder()
                                         .code(HttpStatus.BAD_REQUEST.value())
                                         .message("Product validation error")
                                         .success(false)
@@ -47,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
                             }
                             Long authUserId = sessionId.getSessionId();
                             if (!authUserId.equals(productRequest.getAuthUserId())) {
-                                ResponseDTO.<ProductResponse>builder()
+                                ResponseDto.<ProductResponse>builder()
                                         .code(HttpStatus.NOT_FOUND.value())
                                         .message("AuthUser not found")
                                         .success(false)
@@ -57,14 +57,14 @@ public class ProductServiceImpl implements ProductService {
                             product.setAuthUser(authUser);
                             product.setCategory(category);
                             productRepository.save(product);
-                            return ResponseDTO.<ProductResponse>builder()
+                            return ResponseDto.<ProductResponse>builder()
                                     .code(HttpStatus.OK.value())
                                     .message("Product successfully created")
                                     .success(true)
                                     .data(productMapper.toResponse(product))
                                     .build();
                         }))
-                .orElseGet(() -> ResponseDTO.<ProductResponse>builder()
+                .orElseGet(() -> ResponseDto.<ProductResponse>builder()
                         .code(HttpStatus.NOT_FOUND.value())
                         .message("AuthUser or Category not found")
                         .success(false)
@@ -72,10 +72,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResponseDTO<ProductResponse> getProduct(Long productId) {
+    public ResponseDto<ProductResponse> getProduct(Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + productId));
-        return ResponseDTO.<ProductResponse>builder()
+        return ResponseDto.<ProductResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Product successfully found")
                 .success(true)
@@ -84,9 +84,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResponseDTO<List<ProductResponse>> getAllProduct() {
+    public ResponseDto<List<ProductResponse>> getAllProduct() {
         List<Product> products = productRepository.findAll();
-        return ResponseDTO.<List<ProductResponse>>builder()
+        return ResponseDto.<List<ProductResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Product successfully created")
                 .success(true)
@@ -95,7 +95,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResponseDTO<Void> updateProduct(ProductRequest productRequest, Long productId) {
+    public ResponseDto<Void> updateProduct(ProductRequest productRequest, Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + productId));
         Category category = categoryRepository.findById(productRequest.getCategoryId())
@@ -105,7 +105,7 @@ public class ProductServiceImpl implements ProductService {
         product.setCategory(category);
         product.setUpdatedAt(LocalDateTime.now());
         productRepository.save(product);
-        return ResponseDTO.<Void>builder()
+        return ResponseDto.<Void>builder()
                 .code(HttpStatus.OK.value())
                 .message("Product successfully updated")
                 .success(true)

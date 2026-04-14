@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import uz.pdp.ecommerce.entity.AuthUser;
 import uz.pdp.ecommerce.entity.Category;
 import uz.pdp.ecommerce.entity.Product;
-import uz.pdp.ecommerce.exception.CustomUserNotFoundException;
+import uz.pdp.ecommerce.exception.UserNotFoundException;
 import uz.pdp.ecommerce.exception.ResourceNotFoundException;
 import uz.pdp.ecommerce.repository.AuthUserRepository;
 import uz.pdp.ecommerce.repository.CategoryRepository;
@@ -21,7 +21,7 @@ public class ProductMapper {
 
     public Product toEntity(ProductRequest productRequest) {
         AuthUser authUser = authUserRepository.findById(productRequest.getAuthUserId())
-                .orElseThrow(() -> new CustomUserNotFoundException("AuthUser not found: " + productRequest.getAuthUserId()));
+                .orElseThrow(() -> new UserNotFoundException("AuthUser not found: " + productRequest.getAuthUserId()));
         Category category = categoryRepository.findById(productRequest.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found: " + productRequest.getCategoryId()));
         return Product.builder()

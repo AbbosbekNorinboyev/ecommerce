@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import uz.pdp.ecommerce.entity.AuthUser;
 import uz.pdp.ecommerce.entity.Category;
-import uz.pdp.ecommerce.exception.CustomUserNotFoundException;
+import uz.pdp.ecommerce.exception.UserNotFoundException;
 import uz.pdp.ecommerce.repository.AuthUserRepository;
 import uz.pdp.ecommerce.request.CategoryRequest;
 import uz.pdp.ecommerce.response.CategoryResponse;
@@ -17,7 +17,7 @@ public class CategoryMapper {
 
     public Category toEntity(CategoryRequest categoryRequest) {
         AuthUser authUser = authUserRepository.findById(categoryRequest.getAuthUserId())
-                .orElseThrow(() -> new CustomUserNotFoundException("AuthUser not found: " + categoryRequest.getAuthUserId()));
+                .orElseThrow(() -> new UserNotFoundException("AuthUser not found: " + categoryRequest.getAuthUserId()));
         return Category.builder()
                 .name(categoryRequest.getName())
                 .description(categoryRequest.getDescription())

@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import uz.pdp.ecommerce.dto.ErrorDTO;
-import uz.pdp.ecommerce.dto.ResponseDTO;
+import uz.pdp.ecommerce.dto.ErrorDto;
+import uz.pdp.ecommerce.dto.ResponseDto;
 
 import java.util.List;
 
@@ -15,19 +15,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseDTO<Void> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        List<ErrorDTO> errors = e.getBindingResult().getFieldErrors()
+    public ResponseDto<Void> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        List<ErrorDto> errors = e.getBindingResult().getFieldErrors()
                 .stream()
                 .map(fieldError -> {
                     String field = fieldError.getField();
                     String defaultMessage = fieldError.getDefaultMessage();
                     String rejectedValue = String.valueOf(fieldError.getRejectedValue());
-                    return new ErrorDTO(
+                    return new ErrorDto(
                             field,
                             String.format("defaultMessage: '%s', rejectedValue: '%s'", defaultMessage, rejectedValue)
                     );
                 }).toList();
-        return ResponseDTO.<Void>builder()
+        return ResponseDto.<Void>builder()
                 .code(HttpStatus.BAD_REQUEST.value())  // Bad request kodi
                 .message("Validation error")
                 .success(false)
@@ -36,26 +36,26 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseDTO<ResourceNotFoundException> handleResourceNotFoundException(ResourceNotFoundException resourceNotFoundException) {
-        return ResponseDTO.<ResourceNotFoundException>builder()
+    public ResponseDto<ResourceNotFoundException> handleResourceNotFoundException(ResourceNotFoundException resourceNotFoundException) {
+        return ResponseDto.<ResourceNotFoundException>builder()
                 .code(HttpStatus.NOT_FOUND.value())
                 .message(resourceNotFoundException.getMessage())
                 .success(false)
                 .build();
     }
 
-    @ExceptionHandler(CustomUserNotFoundException.class)
-    public ResponseDTO<CustomUserNotFoundException> handleCustomUserNotFoundException(CustomUserNotFoundException customUserNotFoundException) {
-        return ResponseDTO.<CustomUserNotFoundException>builder()
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseDto<UserNotFoundException> handleCustomUserNotFoundException(UserNotFoundException userNotFoundException) {
+        return ResponseDto.<UserNotFoundException>builder()
                 .code(HttpStatus.NOT_FOUND.value())
-                .message(customUserNotFoundException.getMessage())
+                .message(userNotFoundException.getMessage())
                 .success(false)
                 .build();
     }
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseDTO<Void> handleBadRequestException(BadRequestException badRequestException) {
-        return ResponseDTO.<Void>builder()
+    public ResponseDto<Void> handleBadRequestException(BadRequestException badRequestException) {
+        return ResponseDto.<Void>builder()
                 .code(HttpStatus.BAD_REQUEST.value())
                 .message(badRequestException.getMessage())
                 .success(false)

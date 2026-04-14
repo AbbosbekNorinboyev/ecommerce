@@ -1,4 +1,4 @@
-package uz.pdp.ecommerce.security;
+package uz.pdp.ecommerce.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;

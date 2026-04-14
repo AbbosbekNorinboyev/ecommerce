@@ -1,4 +1,4 @@
-package uz.pdp.ecommerce.security;
+package uz.pdp.ecommerce.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import uz.pdp.ecommerce.filter.JWTFilter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +25,7 @@ import java.util.List;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final JWTFilter jwtFilter;
+    private final JWTAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -45,6 +44,7 @@ public class SecurityConfig {
                                     "/swagger-ui.html",
                                     "/v3/api-docs/**",
                                     "/api/auths/**",
+                                    "/actuator/health/**",
                                     "/webjars/**").permitAll()
                             .requestMatchers(
                                     "/api/categories/create",
@@ -62,7 +62,7 @@ public class SecurityConfig {
                 .sessionManagement(sessionManagementConfigurer -> {
                     sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 })
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

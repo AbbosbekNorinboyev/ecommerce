@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import uz.pdp.ecommerce.entity.AuthUser;
 import uz.pdp.ecommerce.entity.Comment;
 import uz.pdp.ecommerce.entity.Product;
-import uz.pdp.ecommerce.exception.CustomUserNotFoundException;
+import uz.pdp.ecommerce.exception.UserNotFoundException;
 import uz.pdp.ecommerce.repository.AuthUserRepository;
 import uz.pdp.ecommerce.repository.ProductRepository;
 import uz.pdp.ecommerce.request.CommentRequest;
@@ -20,9 +20,9 @@ public class CommentMapper {
 
     public Comment toEntity(CommentRequest commentRequest) {
         AuthUser authUser = authUserRepository.findById(commentRequest.getAuthUserId())
-                .orElseThrow(() -> new CustomUserNotFoundException("AuthUser not found: " + commentRequest.getAuthUserId()));
+                .orElseThrow(() -> new UserNotFoundException("AuthUser not found: " + commentRequest.getAuthUserId()));
         Product product = productRepository.findById(commentRequest.getProductId())
-                .orElseThrow(() -> new CustomUserNotFoundException("Product not found: " + commentRequest.getProductId()));
+                .orElseThrow(() -> new UserNotFoundException("Product not found: " + commentRequest.getProductId()));
         return Comment.builder()
                 .authUser(authUser)
                 .product(product)

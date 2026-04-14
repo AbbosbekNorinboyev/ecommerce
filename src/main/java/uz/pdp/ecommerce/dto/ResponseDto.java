@@ -10,10 +10,10 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class ResponseDTO<T> {
+public class ResponseDto<T> {
     private int code;
     private String message;
     private boolean success;
     private T data;
-    private List<ErrorDTO> errors;
+    private List<ErrorDto> errors;
 }

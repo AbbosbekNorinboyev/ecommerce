@@ -1,4 +1,4 @@
-package uz.pdp.ecommerce.security;
+package uz.pdp.ecommerce.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

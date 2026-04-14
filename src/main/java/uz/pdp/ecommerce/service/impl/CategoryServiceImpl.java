@@ -3,8 +3,8 @@ package uz.pdp.ecommerce.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import uz.pdp.ecommerce.dto.ErrorDTO;
-import uz.pdp.ecommerce.dto.ResponseDTO;
+import uz.pdp.ecommerce.dto.ErrorDto;
+import uz.pdp.ecommerce.dto.ResponseDto;
 import uz.pdp.ecommerce.entity.Category;
 import uz.pdp.ecommerce.exception.ResourceNotFoundException;
 import uz.pdp.ecommerce.mapper.CategoryMapper;
@@ -12,7 +12,7 @@ import uz.pdp.ecommerce.repository.AuthUserRepository;
 import uz.pdp.ecommerce.repository.CategoryRepository;
 import uz.pdp.ecommerce.request.CategoryRequest;
 import uz.pdp.ecommerce.response.CategoryResponse;
-import uz.pdp.ecommerce.security.SessionId;
+import uz.pdp.ecommerce.config.SessionId;
 import uz.pdp.ecommerce.service.CategoryService;
 import uz.pdp.ecommerce.validation.CategoryValidation;
 
@@ -29,12 +29,12 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryValidation categoryValidation;
 
     @Override
-    public ResponseDTO<CategoryResponse> createCategory(CategoryRequest categoryRequest) {
+    public ResponseDto<CategoryResponse> createCategory(CategoryRequest categoryRequest) {
         return authUserRepository.findById(sessionId.getSessionId())
                 .map(authUser -> {
-                    List<ErrorDTO> errors = categoryValidation.validate(categoryRequest);
+                    List<ErrorDto> errors = categoryValidation.validate(categoryRequest);
                     if (!errors.isEmpty()) {
-                        ResponseDTO.<CategoryResponse>builder()
+                        ResponseDto.<CategoryResponse>builder()
                                 .code(HttpStatus.NOT_FOUND.value())
                                 .message("Category validation error")
                                 .success(false)
@@ -43,7 +43,7 @@ public class CategoryServiceImpl implements CategoryService {
                     }
                     Long authUserId = sessionId.getSessionId();
                     if (!authUserId.equals(categoryRequest.getAuthUserId())) {
-                        ResponseDTO.<CategoryResponse>builder()
+                        ResponseDto.<CategoryResponse>builder()
                                 .code(HttpStatus.NOT_FOUND.value())
                                 .message("AuthUser not found")
                                 .success(false)
@@ -52,14 +52,14 @@ public class CategoryServiceImpl implements CategoryService {
                     Category category = categoryMapper.toEntity(categoryRequest);
                     category.setAuthUser(authUser);
                     categoryRepository.save(category);
-                    return ResponseDTO.<CategoryResponse>builder()
+                    return ResponseDto.<CategoryResponse>builder()
                             .code(HttpStatus.OK.value())
                             .message("Category successfully created")
                             .success(true)
                             .data(categoryMapper.toResponse(category))
                             .build();
                 })
-                .orElseGet(() -> ResponseDTO.<CategoryResponse>builder()
+                .orElseGet(() -> ResponseDto.<CategoryResponse>builder()
                         .code(HttpStatus.NOT_FOUND.value())
                         .message("AuthUser not found: " + categoryRequest.getAuthUserId())
                         .success(false)
@@ -68,10 +68,10 @@ public class CategoryServiceImpl implements CategoryService {
 
 
     @Override
-    public ResponseDTO<CategoryResponse> getCategory(Long categoryId) {
+    public ResponseDto<CategoryResponse> getCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found: " + categoryId));
-        return ResponseDTO.<CategoryResponse>builder()
+        return ResponseDto.<CategoryResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Category successfully found")
                 .success(true)
@@ -80,9 +80,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public ResponseDTO<List<CategoryResponse>> getAllCategory() {
+    public ResponseDto<List<CategoryResponse>> getAllCategory() {
         List<Category> categories = categoryRepository.findAll();
-        return ResponseDTO.<List<CategoryResponse>>builder()
+        return ResponseDto.<List<CategoryResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Category list successfully created")
                 .success(true)
@@ -91,14 +91,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public ResponseDTO<Void> updateCategory(CategoryRequest categoryRequest, Long categoryId) {
+    public ResponseDto<Void> updateCategory(CategoryRequest categoryRequest, Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found: " + categoryId));
         category.setName(categoryRequest.getName());
         category.setDescription(categoryRequest.getDescription());
         category.setUpdatedAt(LocalDateTime.now());
         categoryRepository.save(category);
-        return ResponseDTO.<Void>builder()
+        return ResponseDto.<Void>builder()
                 .code(HttpStatus.OK.value())
                 .message("Category successfully updated")
                 .success(true)
