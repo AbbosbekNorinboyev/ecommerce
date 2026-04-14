@@ -14,7 +14,6 @@ import uz.pdp.ecommerce.response.ProductOrderResponse;
 @Component
 @RequiredArgsConstructor
 public class ProductOrderMapper {
-
     private final AuthUserRepository authUserRepository;
     private final ProductRepository productRepository;
 
@@ -41,6 +40,7 @@ public class ProductOrderMapper {
                 .totalPrice(productOrder.getTotalPrice())
                 .quantity(productOrder.getQuantity())
                 .paymentType(productOrder.getPaymentType())
+                .orderStatus(productOrder.getOrderStatus())
                 .createdAt(productOrder.getCreatedAt())
                 .updatedAt(productOrder.getUpdatedAt())
                 .build();

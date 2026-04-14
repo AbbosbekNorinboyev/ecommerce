@@ -14,4 +14,6 @@ public interface ProductOrderService {
     ResponseDto<List<ProductOrderResponse>> getAllProductOrder();
 
     ResponseDto<Void> updateProductOrder(ProductOrderRequest productOrderRequest, Long productOrderId);
+
+    ResponseDto<Void> updateOrderStatus(Long productOrderId, String orderStatus);
 }

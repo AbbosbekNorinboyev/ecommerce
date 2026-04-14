@@ -2,11 +2,15 @@ package uz.pdp.ecommerce.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import uz.pdp.ecommerce.config.SessionId;
 import uz.pdp.ecommerce.dto.ErrorDto;
+import uz.pdp.ecommerce.dto.OrderStatusDto;
 import uz.pdp.ecommerce.dto.ResponseDto;
 import uz.pdp.ecommerce.entity.Product;
 import uz.pdp.ecommerce.entity.ProductOrder;
+import uz.pdp.ecommerce.enums.OrderStatus;
 import uz.pdp.ecommerce.exception.ResourceNotFoundException;
 import uz.pdp.ecommerce.mapper.ProductOrderMapper;
 import uz.pdp.ecommerce.repository.AuthUserRepository;
@@ -15,7 +19,6 @@ import uz.pdp.ecommerce.repository.ProductRepository;
 import uz.pdp.ecommerce.request.ProductOrderRequest;
 import uz.pdp.ecommerce.response.ProductOrderResponse;
 import uz.pdp.ecommerce.response.ProductResponse;
-import uz.pdp.ecommerce.config.SessionId;
 import uz.pdp.ecommerce.service.ProductOrderService;
 import uz.pdp.ecommerce.validation.ProductOrderValidation;
 
@@ -30,6 +33,7 @@ public class ProductOrderServiceImpl implements ProductOrderService {
     private final AuthUserRepository authUserRepository;
     private final ProductOrderValidation productOrderValidation;
     private final ProductOrderRepository productOrderRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Override
     public ResponseDto<ProductOrderResponse> createProductOrder(ProductOrderRequest productOrderRequest) {
@@ -104,6 +108,27 @@ public class ProductOrderServiceImpl implements ProductOrderService {
         productOrder.setQuantity(productOrderRequest.getQuantity());
         productOrder.setTotalPrice(productOrderRequest.getTotalPrice());
         productOrderRepository.save(productOrder);
+        return ResponseDto.<Void>builder()
+                .code(HttpStatus.OK.value())
+                .message("ProductOrder successfully updated")
+                .success(true)
+                .build();
+    }
+
+    public ResponseDto<Void> updateOrderStatus(Long productOrderId, String status) {
+        // DB update
+        ProductOrder order = productOrderRepository.findById(productOrderId).orElseThrow();
+        order.setOrderStatus(OrderStatus.valueOf(status));
+        productOrderRepository.save(order);
+
+        // WebSocket orqali yuborish
+        OrderStatusDto dto = new OrderStatusDto(productOrderId, status);
+
+        messagingTemplate.convertAndSend(
+                "/topic/orders/" + order.getAuthUser().getId(),
+                dto
+        );
+
         return ResponseDto.<Void>builder()
                 .code(HttpStatus.OK.value())
                 .message("ProductOrder successfully updated")

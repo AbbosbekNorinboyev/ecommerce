@@ -36,4 +36,10 @@ public class ProductOrderController {
                                                 @PathVariable Long productOrderId) {
         return productOrderService.updateProductOrder(productOrderRequest, productOrderId);
     }
+
+    @PutMapping("/update/status/{productOrderId}")
+    public ResponseDto<Void> updateOrderStatus(@PathVariable Long productOrderId,
+                                               @RequestParam String status) {
+        return productOrderService.updateOrderStatus(productOrderId, status);
+    }
 }

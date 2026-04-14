@@ -2,6 +2,7 @@ package uz.pdp.ecommerce.response;
 
 import lombok.*;
 import uz.pdp.ecommerce.enums.PaymentType;
+import uz.pdp.ecommerce.enums.OrderStatus;
 
 import java.time.LocalDateTime;
 
@@ -17,6 +18,7 @@ public class ProductOrderResponse {
     private Double totalPrice;
     private Integer quantity;
     private PaymentType paymentType;
+    private OrderStatus orderStatus;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

@@ -2,6 +2,7 @@ package uz.pdp.ecommerce.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import uz.pdp.ecommerce.enums.OrderStatus;
 import uz.pdp.ecommerce.enums.PaymentType;
 
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ public class ProductOrder {
     private Double totalPrice;
     private Integer quantity;
     private PaymentType paymentType;
+    private OrderStatus orderStatus;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

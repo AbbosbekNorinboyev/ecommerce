@@ -3,6 +3,7 @@ package uz.pdp.ecommerce.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import uz.pdp.ecommerce.config.SessionId;
 import uz.pdp.ecommerce.dto.ErrorDto;
 import uz.pdp.ecommerce.dto.ResponseDto;
 import uz.pdp.ecommerce.entity.Category;
@@ -14,7 +15,6 @@ import uz.pdp.ecommerce.repository.CategoryRepository;
 import uz.pdp.ecommerce.repository.ProductRepository;
 import uz.pdp.ecommerce.request.ProductRequest;
 import uz.pdp.ecommerce.response.ProductResponse;
-import uz.pdp.ecommerce.config.SessionId;
 import uz.pdp.ecommerce.service.ProductService;
 import uz.pdp.ecommerce.validation.ProductValidation;
 
